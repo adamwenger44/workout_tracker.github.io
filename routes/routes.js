@@ -4,54 +4,52 @@ const express = require("express");
 const app = express();
 const path = require("path");
 
-
-router.post("/api/workouts", (req, res) => {
-  db.workouts.create(req.body)
+app.get("/api/workouts", (req, res) => {
+  db.workout.find()
     .then(dbTransaction => {
-      res.json(dbTransaction);
+      console.log(dbTransaction, '<==============================')
+      res.json(dbTransaction)
     })
     .catch(err => {
       res.status(400).json(err);
     });
 });
 
-router.get("/api/workouts", (req, res) => {
-  db.workout.find()
-    .then(dbTransaction =>{
+app.get("/api/workouts/range", (req, res) => {
+  db.workout.find({})
+    .then(dbTransaction => {
       console.log(dbTransaction, '<==============================')
       res.json(dbTransaction)
-    } )
+      console.log("success")
+    })
     .catch(err => {
       res.status(400).json(err);
     });
 });
-// app.get("/", (req, res) => {
-//   res.sendFile(path.join(__dirname + "../public/index.html"));
+
+// app.post("/api/workouts/:id", (req, res) => {
+//   db.workout.find(
+//     {
+//       _id: req.params.id
+//     },
+//   )
+//     .then(dbTransaction => {
+//       console.log("accomplished")
+//       res.json(dbTransaction)
+//     })
+//     .catch(err => {
+//       res.status(400).json(err);
+//     });
 // });
 
 app.get("/exercise", (req, res) => {
-  res.sendFile(path.join(__dirname + "../public/exercise.html"));
+  res.sendFile(path.join(__dirname + "../../public/exercise.html"));
 });
 
-// router.post("/api/transaction/bulk", ({ body }, res) => {
-//   Transaction.insertMany(body)
-//     .then(dbTransaction => {
-//       res.json(dbTransaction);
-//     })
-//     .catch(err => {
-//       res.status(400).json(err);
-//     });
-// });
+app.get("/stats", (req, res) => {
+  res.sendFile(path.join(__dirname + "../../public/stats.html"));
+});
 
-// router.get("/api/transaction", (req, res) => {
-//   Transaction.find({})
-//     .sort({ date: -1 })
-//     .then(dbTransaction => {
-//       res.json(dbTransaction);
-//     })
-//     .catch(err => {
-//       res.status(400).json(err);
-//     });
-// });
 
-module.exports = router;
+
+module.exports = app;
