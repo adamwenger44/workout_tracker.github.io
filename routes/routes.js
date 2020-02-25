@@ -27,20 +27,33 @@ app.get("/api/workouts/range", (req, res) => {
     });
 });
 
-// app.post("/api/workouts/:id", (req, res) => {
-//   db.workout.find(
-//     {
-//       _id: req.params.id
-//     },
-//   )
-//     .then(dbTransaction => {
-//       console.log("accomplished")
-//       res.json(dbTransaction)
-//     })
-//     .catch(err => {
-//       res.status(400).json(err);
-//     });
-// });
+app.post("/api/workouts", (req, res) => {
+  workout.create({})
+    .then(dbTransaction => {
+      res.json(dbTransaction);
+    })
+    .catch(err => {
+      res.json(err);
+    });
+});
+
+app.put("/api/workouts/:id", (req, res) => {
+  db.workout.findByIdAndUpdate(
+    req.params.id,
+    { $push: { workouts: req.body }}
+  )
+    .then(dbTransaction => {
+      console.log("accomplished")
+      res.json(dbTransaction)
+    })
+    .catch(err => {
+      res.status(400).json(err);
+    });
+});
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname + "../../public/index.html"));
+});
 
 app.get("/exercise", (req, res) => {
   res.sendFile(path.join(__dirname + "../../public/exercise.html"));
